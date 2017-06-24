@@ -12,7 +12,7 @@ Esp8266 is in deep sleeping after update the weahter forecast
 3. Li-Po battery
 4. 3d printed case(/3d folder)
 
-##Uploading code to esp8266
+## Uploading code to esp8266
 Use arduino ide to upload the code. Don't forget to upload font files.
 
 ## Font
