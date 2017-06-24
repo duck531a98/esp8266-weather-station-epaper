@@ -1,5 +1,7 @@
 /**The MIT License (MIT)
 
+Copyright (c) 2016 by Daniel Eichhorn
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -18,6 +20,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+See more at http://blog.squix.ch
 */
 
 #include <ESP8266WiFi.h>
@@ -36,6 +39,8 @@ SOFTWARE.
 /***************************
  * Begin Settings
  **************************/
+// Please read http://blog.squix.org/weatherstation-getting-code-adapting-it
+// for setup instructions
 WiFiManager wifiManager;
 const char* WIFI_SSID = "duckgagaga";
 const char* WIFI_PWD = "0114987395";
@@ -203,7 +208,7 @@ void configModeCallback (WiFiManager *myWiFiManager) {
   
   EPD.clearshadows(); EPD.clearbuffer();EPD.fontscale=1;
   EPD.SetFont(0x0);
-  EPD.DrawUTF(0,0,16,16,(unsigned char *)"WIFI未连接");
+  EPD.DrawUTF(0,0,16,16,(unsigned char *)"WIFI未连接，请连接“Weather Widget”继续配置");
   EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
   driver_delay_xms(DELAYTIME);
 }
