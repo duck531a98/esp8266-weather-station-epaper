@@ -5,6 +5,8 @@ You can get a 2.9inch e-paper display in Waveshare's shop.
 
 Esp8266 is in deep sleeping after update the weather forecast to save battery.
 ![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170623_232157.jpg)
+![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170624_214454.jpg)
+![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170624_214405.jpg)
 
 ## BOM
 1. 2.9inch e-paper from Waveshare 
