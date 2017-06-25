@@ -164,7 +164,8 @@ void updatedisplay()
     EPD.SetFont(0x2);
     EPD.DrawUTF(0,270,10,10,lastUpdate);//updatetime
     float voltage=(float)(analogRead(A0))/1024;
-    EPD.DrawUTF(10,270,10,10,(String)((voltage+0.083)*13/3));
+    String voltagestring=(String)((voltage+0.083)*13/3);
+    EPD.DrawUTF(10,270,10,10,voltagestring+"V");
     EPD.SetFont(0x1);
     EPD.DrawUTF(96,5,32,32,heweather.now_tmp+"°");//天气实况温度
     EPD.DrawYline(96,127,57);

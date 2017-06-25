@@ -1,7 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include "heweather.h"
-#include "WeatherStationImages.h"
+
 byte heweatherclient::getMeteoconIcon(int weathercodeindex) {
   if(weathercodeindex==0) return 12;
   if(weathercodeindex==1) return 58;
