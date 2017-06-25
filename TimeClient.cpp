@@ -32,14 +32,14 @@ TimeClient::TimeClient(float utcOffset) {
 void TimeClient::updateTime() {
   WiFiClient client;
   const int httpPort = 80;
-  if (!client.connect("duckduckweather.applinzi.com", httpPort)) {
+  if (!client.connect("duckduckweather.000webhostapp.com", httpPort)) {
     Serial.println("connection failed");
     return;
   }
   
   // This will send the request to the server
   client.print(String("GET")+"/time.php"+"HTTP/1.1\r\n" +
-               String("Host:duckduckweather.applinzi.com\r\n") + 
+               String("Host:duckduckweather.000webhostapp.com\r\n") + 
                String("Connection: close\r\n\r\n"));
   int repeatCounter = 0;
   while(!client.available() && repeatCounter < 10) {
