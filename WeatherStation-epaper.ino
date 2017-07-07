@@ -36,18 +36,19 @@ See more at http://blog.squix.ch
 #include <SPI.h>
 #include "EPD_drive.h"
 #include "EPD_drive_gpio.h"
+#include "bitmaps.h"
 /***************************
  * Begin Settings
  **************************/
 // Please read http://blog.squix.org/weatherstation-getting-code-adapting-it
 // for setup instructions
-WiFiManager wifiManager;
+//WiFiManager wifiManager;
 const char* WIFI_SSID = "duckgagaga";
 const char* WIFI_PWD = "0114987395";
 const int UPDATE_INTERVAL_SECS = 10 * 60; // Update every 10 minutes
 const int sleeptime=60;//min
 const float UTC_OFFSET = 8;
-
+ 
 String city;String lastUpdate = "--";
 bool shouldsave=false;bool updating=false;
 TimeClient timeClient(UTC_OFFSET);heweatherclient heweather;Ticker ticker;Ticker avoidstuck;WaveShare_EPD EPD = WaveShare_EPD();
@@ -66,28 +67,35 @@ void setup() {
   pinMode(DC,OUTPUT);
   pinMode(RST,OUTPUT);
   pinMode(BUSY,INPUT);
-  EEPROM.begin(60);
+  EEPROM.begin(20);
   SPI.beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE0));
   SPI.begin();
   EPD.EPD_init_Part();driver_delay_xms(DELAYTIME);
   //WiFi.begin(WIFI_SSID, WIFI_PWD);
-  //wifiManager.resetSettings();
+ 
   /*************************************************
    wifimanager
    *************************************************/
+  WiFiManagerParameter custom_c("city","city","qingdao", 20);
+ WiFiManager wifiManager;
+ //wifiManager.resetSettings();
   wifiManager.setAPCallback(configModeCallback);
   wifiManager.setSaveConfigCallback(saveConfigCallback);
-  WiFiManagerParameter custom_city("city", "city", "qingdao", 40);
-  wifiManager.addParameter(&custom_city); 
+   //WiFiManagerParameter custom_text("<p>input city</p>");
+ // wifiManager.addParameter(&custom_text);
+ // WiFiManagerParameter custom_a("null","null","ignorethis", 20);
+  //wifiManager.addParameter(&custom_a); 
+  //
+  wifiManager.addParameter(&custom_c); 
   wifiManager.autoConnect("Weather widget");
-  city= custom_city.getValue();
+  city= custom_c.getValue();
    /*************************************************
    EPPROM
    *************************************************/
   if (city!="qingdao")
   {
     
-     EEPROM.write(0,city.length());
+         EEPROM.write(0,city.length());
          Serial.print("\n\n");
          Serial.println(String("eeprom_write_0:")+city.length());
          for(int i=0;i<city.length();i++)
@@ -98,6 +106,8 @@ void setup() {
           }
          EEPROM.commit(); 
     }
+
+  
  byte city_length=EEPROM.read(0);
  Serial.println("EEPROM_CITY-LENGTH:");Serial.println(city_length);
  if (city_length>0)
@@ -134,7 +144,8 @@ void loop() {
  
  if(digitalRead(D3)==LOW)
  {
- wifiManager.resetSettings();
+  WiFiManager wifiManager;
+  wifiManager.resetSettings();
  }
  EPD.deepsleep();
  ESP.deepSleep(60 * sleeptime * 1000000);
@@ -149,7 +160,7 @@ void updatedisplay()
     EPD.SetFont(12);unsigned char code[]={0x00,heweather.getMeteoconIcon(heweather.now_cond_index.toInt())};EPD.DrawUnicodeStr(0,16,80,80,1,code);
     EPD.SetFont(13);unsigned char code2[]={0x00,heweather.getMeteoconIcon(heweather.today_cond_d_index.toInt())};EPD.DrawUnicodeStr(0,113,32,32,1,code2);
     EPD.SetFont(13);unsigned char code3[]={0x00,heweather.getMeteoconIcon(heweather.tomorrow_cond_d_index.toInt())};EPD.DrawUnicodeStr(33,113,32,32,1,code3);
-    EPD.DrawXline(114,295,33);EPD.DrawXline(114,295,66);
+    EPD.DrawXline(114,295,31);EPD.DrawXline(114,295,66);
     
     EPD.SetFont(0x0);
     Serial.println("heweather.citystr");
@@ -162,17 +173,19 @@ void updatedisplay()
     EPD.DrawUTF(86,116,16,16,"RH:"+heweather.now_hum+"%"+" "+heweather.now_dir+heweather.now_sc);
     EPD.DrawUTF(102,116,16,16,"今天夜间"+heweather.today_txt_n);
     EPD.SetFont(0x2);
-    EPD.DrawUTF(0,270,10,10,lastUpdate);//updatetime
-    float voltage=(float)(analogRead(A0))/1024;
-    String voltagestring=(String)((voltage+0.083)*13/3);
-    EPD.DrawUTF(10,270,10,10,voltagestring+"V");
+    EPD.DrawUTF(0,250,10,10,lastUpdate);//updatetime
+   // float voltage=(float)(analogRead(A0))/1024;
+   // String voltagestring=(String)((voltage+0.083)*13/3);
+   // EPD.DrawUTF(10,270,10,10,voltagestring+"V");
     EPD.SetFont(0x1);
     EPD.DrawUTF(96,5,32,32,heweather.now_tmp+"°");//天气实况温度
     EPD.DrawYline(96,127,57);
+    dis_batt(0,275);
+   
     
     for(int i=0;i<1808;i++) EPD.EPDbuffer[i]=~EPD.EPDbuffer[i];
-    EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
-    
+   EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
+    //EPD.EPD_Dis_Full((unsigned char *)EPD.EPDbuffer,1);
     driver_delay_xms(DELAYTIME);
       
   
@@ -196,6 +209,7 @@ void updateData() {
 
 
 
+
 void setReadyForWeatherUpdate() {
   Serial.println("Setting readyForUpdate to true");
   readyForWeatherUpdate = true;
@@ -209,7 +223,19 @@ void configModeCallback (WiFiManager *myWiFiManager) {
   
   EPD.clearshadows(); EPD.clearbuffer();EPD.fontscale=1;
   EPD.SetFont(0x0);
-  EPD.DrawUTF(0,0,16,16,(unsigned char *)"WIFI未连接，请连接“Weather Widget”继续配置");
+  EPD.DrawUTF(0,0,16,16,(unsigned char *)"WIFI未连接，请连接“Weather Widget");
   EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
   driver_delay_xms(DELAYTIME);
 }
+void dis_batt(int16_t x, int16_t y)
+{
+  float voltage=(float)(analogRead(A0))/1024;
+  float batt_voltage=(voltage+0.083)*13/3;
+  if (batt_voltage<=3.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_0);
+  if (batt_voltage>3.2&&batt_voltage<=3.45)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_1);
+  if (batt_voltage>3.45&&batt_voltage<=3.7)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_2);
+  if (batt_voltage>3.7&&batt_voltage<=3.95)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_3);
+  if (batt_voltage>3.95&&batt_voltage<=4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_4);
+  if (batt_voltage>4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_5);
+  
+  }

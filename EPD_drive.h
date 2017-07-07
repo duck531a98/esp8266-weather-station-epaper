@@ -34,8 +34,8 @@
   static unsigned char GateVol[]={0x03,0xea};
   
   static  unsigned char BOOSTERFB[] = {0xf0,0x1f}; // Source voltage +15V/-15V
-  static  unsigned char DummyLine[] = {0x3a,0x1a}; // 4 dummy line per gate
-  static  unsigned char Gatetime[] = {0x3b,0x5a};  // 2us per line
+  static  unsigned char DummyLine[] = {0x3a,0x01}; // 4 dummy line per gate
+  static  unsigned char Gatetime[] = {0x3b,B1000};  // 2us per line
   static  unsigned char BorderWavefrom[] = {0x3c,0x63};  // Border
   static  unsigned char RamDataEntryMode[] = {0x11,0x01};  // Ram data entry mode
 
@@ -124,7 +124,8 @@ void DrawUTF(byte x,int16_t y,byte width,byte height,unsigned char *code);
 int UTFtoUNICODE(unsigned char *code);
 void DrawUnicodeChar(byte x,int16_t y,byte width,byte height,unsigned char *code);
 void DrawUnicodeStr(byte x,int16_t y,byte width,byte height,byte strlength,unsigned char *code);
-void drawXbm(int16_t xMove, int16_t yMove, int16_t width, int16_t height, int16_t resizewidth,int16_t resizeheight,unsigned char *xbm);
+void drawXbm(int16_t xMove, int16_t yMove, int16_t width, int16_t height,unsigned char *xbm);
+void DrawXbm_P(int16_t xMove, int16_t yMove, int16_t width, int16_t height,unsigned char *xbm);
 	WaveShare_EPD();
  void SetPixel(char x, int y);
   void clearbuffer();

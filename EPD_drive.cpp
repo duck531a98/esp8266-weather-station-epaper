@@ -135,8 +135,8 @@ void WaveShare_EPD::DrawUnicodeChar(byte x,int16_t y,byte width,byte height,unsi
    Serial.println("offset");
    Serial.println(offset);
    if (offset<0xff*sizeofsinglechar && FontIndex<10) 
-   {drawXbm(x,y,width,height,width,height,(unsigned char *)zi); }
-   else  {drawXbm(x,y,width,height,width,height,(unsigned char *)zi);}
+   {drawXbm(x,y,width,height,(unsigned char *)zi); }
+   else  {drawXbm(x,y,width,height,(unsigned char *)zi);}
   
 SPIFFS.end();
 }
@@ -173,20 +173,42 @@ void WaveShare_EPD::DrawUnicodeStr(byte x,int16_t y,byte width,byte height,byte 
     }
   
   }
-void WaveShare_EPD::drawXbm(int16_t xMove, int16_t yMove, int16_t width, int16_t height, int16_t resizewidth,int16_t resizeheight,unsigned char *xbm) {
-  int16_t widthInXbm = (width + 7) / 8;
+void WaveShare_EPD::drawXbm(int16_t xMove, int16_t yMove, int16_t width, int16_t height,unsigned char *xbm) {
+  int16_t heightInXbm = (height + 7) / 8;
   uint8_t data;
   for(int16_t x = 0; x < width; x++) {
     for(int16_t y = 0; y < height; y++ ) {
       if (y & 7) {
         data <<= 1; // Move a bit
       } else {  // Read new data every 8 bit
-        data = xbm[(y / 8) + x * widthInXbm];
+        data = xbm[(y / 8) + x * heightInXbm];
       }
       // if there is a bit draw it
       if (((data & 0x80)>>7)) {
-       if(y<=resizeheight&&x<=resizewidth&&fontscale==1) {SetPixel(xMove + y, yMove + x);CurrentCursor=x;}
-       if(y<=resizeheight&&x<=resizewidth&&fontscale==2) {SetPixel(xMove + y*2, yMove + x*2);SetPixel(xMove + y*2+1, yMove + x*2);SetPixel(xMove + y*2, yMove + x*2+1);SetPixel(xMove + y*2+1, yMove + x*2+1);}
+       if(fontscale==1) {SetPixel(xMove + y, yMove + x);CurrentCursor=x;}
+       if(fontscale==2) {SetPixel(xMove + y*2, yMove + x*2);SetPixel(xMove + y*2+1, yMove + x*2);SetPixel(xMove + y*2, yMove + x*2+1);SetPixel(xMove + y*2+1, yMove + x*2+1);}
+      }
+    }
+  }
+}
+
+void WaveShare_EPD::DrawXbm_P(int16_t xMove, int16_t yMove, int16_t width, int16_t height,unsigned char *xbm) {
+ int16_t heightInXbm = (height + 7) / 8;
+ uint8_t data;
+ unsigned char temp[heightInXbm*width];
+ memcpy_P(temp, xbm, heightInXbm*width);
+  
+  for(int16_t x = 0; x < width; x++) {
+    for(int16_t y = 0; y < height; y++ ) {
+      if (y & 7) {
+        data <<= 1; // Move a bit
+      } else {  // Read new data every 8 bit
+        data = temp[(y / 8) + x * heightInXbm];
+      }
+      // if there is a bit draw it
+      if (((data & 0x80)>>7)) {
+       if(fontscale==1) {SetPixel(xMove + y, yMove + x);CurrentCursor=x;}
+       if(fontscale==2) {SetPixel(xMove + y*2, yMove + x*2);SetPixel(xMove + y*2+1, yMove + x*2);SetPixel(xMove + y*2, yMove + x*2+1);SetPixel(xMove + y*2+1, yMove + x*2+1);}
       }
     }
   }
