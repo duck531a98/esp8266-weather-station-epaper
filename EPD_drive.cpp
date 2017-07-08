@@ -196,15 +196,15 @@ void WaveShare_EPD::drawXbm(int16_t xMove, int16_t yMove, int16_t width, int16_t
 void WaveShare_EPD::DrawXbm_P(int16_t xMove, int16_t yMove, int16_t width, int16_t height,unsigned char *xbm) {
  int16_t heightInXbm = (height + 7) / 8;
  uint8_t data;
- unsigned char temp[heightInXbm*width];
- memcpy_P(temp, xbm, heightInXbm*width);
+ //unsigned char temp[heightInXbm*width];
+ //memcpy_P(temp, xbm, heightInXbm*width);
   
   for(int16_t x = 0; x < width; x++) {
     for(int16_t y = 0; y < height; y++ ) {
       if (y & 7) {
         data <<= 1; // Move a bit
       } else {  // Read new data every 8 bit
-        data = temp[(y / 8) + x * heightInXbm];
+        data = pgm_read_byte(xbm+(y / 8) + x * heightInXbm);
       }
       // if there is a bit draw it
       if (((data & 0x80)>>7)) {

@@ -81,10 +81,21 @@ void setup() {
   //WiFi.begin(WIFI_SSID, WIFI_PWD);
   WiFiManagerParameter custom_c("city","city","your city", 20);
   WiFiManager wifiManager;
+  wifiManager.setTimeout(check_config());
   wifiManager.setAPCallback(configModeCallback);
   wifiManager.setSaveConfigCallback(saveConfigCallback);
   wifiManager.addParameter(&custom_c); 
-  wifiManager.autoConnect("Weather widget");
+ if(!wifiManager.autoConnect("Weather widget"));
+ {
+  Serial.println("failed to connect and hit timeout");
+  EPD.clearshadows(); 
+  EPD.clearbuffer();
+  EPD.fontscale=1;
+  EPD.SetFont(0x0);
+  EPD.DrawUTF(0,0,16,16,(unsigned char *)"配置超时，按RESET键重新配置");
+  EPD.DrawUTF(18,0,16,16,(unsigned char *)"请在3分钟内完成设置"); 
+  EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
+  }
   city= custom_c.getValue();
    /*************************************************
    EPPROM
@@ -219,8 +230,9 @@ void configModeCallback (WiFiManager *myWiFiManager) {
   //进入配置模式
   
   EPD.clearshadows(); EPD.clearbuffer();EPD.fontscale=1;
-  EPD.SetFont(0x0);
-  EPD.DrawUTF(0,0,16,16,(unsigned char *)"WIFI未连接，请连接“Weather Widget”");
+  //EPD.SetFont(0x0);
+  //EPD.DrawUTF(0,0,16,16,(unsigned char *)"WIFI未连接，请连接“Weather Widget”");
+  EPD.DrawXbm_P(0,0,296,128,(unsigned char *)configpage);
   EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
   driver_delay_xms(DELAYTIME);
 }
@@ -234,6 +246,24 @@ void dis_batt(int16_t x, int16_t y)
   if (batt_voltage>3.7&&batt_voltage<=3.95)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_3);
   if (batt_voltage>3.95&&batt_voltage<=4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_4);
   if (batt_voltage>4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_5);
+  
+  }
+byte check_config()
+{
+   byte rtc_mem[4];
+  ESP.rtcUserMemoryRead(1, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
+  if (rtc_mem[0]!=126)
+  {
+    Serial.println("first time to run check config");
+    rtc_mem[0]=126;
+    ESP.rtcUserMemoryWrite(1, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
+    return 180;
+    }
+  else
+  {
+    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
+    return 0;
+    } 
   
   }
 void check_rtc_mem()
