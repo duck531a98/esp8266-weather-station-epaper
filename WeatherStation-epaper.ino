@@ -41,10 +41,10 @@ SOFTWARE.
  **************************/
 //const char* WIFI_SSID = "";
 //const char* WIFI_PWD = "";
-const int sleeptime=60;//min
+const int sleeptime=1;//min
 const float UTC_OFFSET = 8;
-byte end_time=23;
-byte start_time=8;
+byte end_time=12;
+byte start_time=13;
  /***************************
   **************************/
 String city;
@@ -61,8 +61,9 @@ void saveConfigCallback () {
    shouldsave=true;
 }
 void setup() {
-  check_rtc_mem();
+ 
   Serial.begin(115200);Serial.println();Serial.println();
+   check_rtc_mem();
   pinMode(D3,INPUT);
   pinMode(CS,OUTPUT);
   pinMode(DC,OUTPUT);
@@ -196,10 +197,11 @@ void updateData() {
   byte Hours=timeClient.getHours().toInt();
   if (Hours=end_time)
   {
-    if((start_time-end_time)<0)  rtc_mem[1]=(24-Hours+start_time)*60/sleeptime-1;
-    else rtc_mem[1]=(start_time-Hours)*60/sleeptime-1;
+    if((start_time-end_time)<0)  rtc_mem[1]=(24-Hours+start_time)*60/sleeptime;
+    else rtc_mem[1]=(start_time-Hours)*60/sleeptime;
     ESP.rtcUserMemoryWrite(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
-    
+    Serial.println("rtc_mem[1]");
+    Serial.println(rtc_mem[1]);
     }
  
   Serial.print("heweather.rain");Serial.print(heweather.rain);Serial.print("\n");
@@ -215,7 +217,7 @@ void configModeCallback (WiFiManager *myWiFiManager) {
   
   EPD.clearshadows(); EPD.clearbuffer();EPD.fontscale=1;
   EPD.SetFont(0x0);
-  EPD.DrawUTF(0,0,16,16,(unsigned char *)"WIFI未连接，请连接“Weather Widget");
+  EPD.DrawUTF(0,0,16,16,(unsigned char *)"WIFI未连接，请连接“Weather Widget”");
   EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
   driver_delay_xms(DELAYTIME);
 }
@@ -241,6 +243,7 @@ void check_rtc_mem()
   ESP.rtcUserMemoryRead(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
   if (rtc_mem[0]!=126)
   {
+    Serial.println("first time to run");
     rtc_mem[0]=126;
     rtc_mem[1]=0;
     ESP.rtcUserMemoryWrite(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
@@ -250,6 +253,8 @@ void check_rtc_mem()
     if(rtc_mem[1]>0) 
     {
        rtc_mem[1]--;
+       Serial.println("don't need to update weather");
+       Serial.println(rtc_mem[1]);
        ESP.rtcUserMemoryWrite(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
        EPD.deepsleep();
        ESP.deepSleep(60 * sleeptime * 1000000);
