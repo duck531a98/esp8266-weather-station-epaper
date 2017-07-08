@@ -43,7 +43,7 @@ SOFTWARE.
 //const char* WIFI_PWD = "";
 const int sleeptime=60;//71min maximum
 const float UTC_OFFSET = 8;
-byte end_time=23;
+byte end_time=0;
 byte start_time=8;
 const char* server="duckduckweather.esy.es";
  /***************************
@@ -81,19 +81,27 @@ void setup() {
   //WiFi.begin(WIFI_SSID, WIFI_PWD);
   WiFiManagerParameter custom_c("city","city","your city", 20);
   WiFiManager wifiManager;
-  wifiManager.setTimeout(check_config());
+  unsigned long timeout=check_config();
+  if (timeout=0)
+  {
+     EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
+    }
+  wifiManager.setConfigPortalTimeout(timeout);
   wifiManager.setAPCallback(configModeCallback);
   wifiManager.setSaveConfigCallback(saveConfigCallback);
   wifiManager.addParameter(&custom_c); 
- if(!wifiManager.autoConnect("Weather widget"));
- {
+  wifiManager.autoConnect("Weather widget");
+  while (WiFi.status() != WL_CONNECTED)
+  {
   Serial.println("failed to connect and hit timeout");
   EPD.clearshadows(); 
   EPD.clearbuffer();
   EPD.fontscale=1;
   EPD.SetFont(0x0);
-  EPD.DrawUTF(0,0,16,16,(unsigned char *)"配置超时，按RESET键重新配置");
-  EPD.DrawUTF(18,0,16,16,(unsigned char *)"请在3分钟内完成设置"); 
+  EPD.DrawUTF(0,0,16,16,(unsigned char *)"配置超时，如需重新配置");
+  EPD.DrawUTF(18,0,16,16,(unsigned char *)"关闭电源等待2分钟再开启");
+  EPD.DrawUTF(36,0,16,16,(unsigned char *)"请在3分钟内完成设置"); 
+  EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
   EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
   }
   city= custom_c.getValue();
@@ -248,20 +256,20 @@ void dis_batt(int16_t x, int16_t y)
   if (batt_voltage>4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_5);
   
   }
-byte check_config()
+unsigned long check_config()
 {
    byte rtc_mem[4];
-  ESP.rtcUserMemoryRead(1, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
+  ESP.rtcUserMemoryRead(4, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
   if (rtc_mem[0]!=126)
   {
     Serial.println("first time to run check config");
     rtc_mem[0]=126;
-    ESP.rtcUserMemoryWrite(1, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
+    ESP.rtcUserMemoryWrite(4, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
     return 180;
     }
   else
   {
-    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
+   
     return 0;
     } 
   
