@@ -72,17 +72,17 @@ int WaveShare_EPD::UTFtoUNICODE(unsigned char *code)
   int i=0;int charcount=0;
   while(code[i]!='\0')
   { 
-    Serial.println("current codei");
-      Serial.println(code[i],HEX);
-        Serial.println(code[i]&0xf0,HEX);
+    //Serial.println("current codei");
+      //Serial.println(code[i],HEX);
+      //  Serial.println(code[i]&0xf0,HEX);
     if(code[i]<=0x7f)  //ascii
     {
       
       UNICODEbuffer[charcount*2]=0x00;
       UNICODEbuffer[charcount*2+1]=code[i];
-         Serial.println("english or number");
-       Serial.println(UNICODEbuffer[charcount*2],HEX);
-         Serial.println(UNICODEbuffer[charcount*2+1],HEX);
+        // Serial.println("english or number");
+      // Serial.println(UNICODEbuffer[charcount*2],HEX);
+       //  Serial.println(UNICODEbuffer[charcount*2+1],HEX);
       i++;charcount++;
    
       }
@@ -92,7 +92,7 @@ int WaveShare_EPD::UTFtoUNICODE(unsigned char *code)
       UNICODEbuffer[charcount*2+1]=(code[i]<<6)+(code[i+1]&0x3f);
       UNICODEbuffer[charcount*2]=(code[i]>>2)&0x07;
       i+=2;charcount++;
-      Serial.println("two bits utf-8");
+     // Serial.println("two bits utf-8");
       }
      else if((code[i]&0xf0)==0xe0)
     {
@@ -100,9 +100,10 @@ int WaveShare_EPD::UTFtoUNICODE(unsigned char *code)
       UNICODEbuffer[charcount*2+1]=(code[i+1]<<6)+(code[i+2]&0x7f);
       UNICODEbuffer[charcount*2]=(code[i]<<4)+((code[i+1]>>2)&0x0f);
       
-       Serial.println("three bits utf-8");
-        Serial.println(UNICODEbuffer[charcount*2],HEX);
-         Serial.println(UNICODEbuffer[charcount*2+1],HEX);i+=3;charcount++;
+       //Serial.println("three bits utf-8");
+       // Serial.println(UNICODEbuffer[charcount*2],HEX);
+        // Serial.println(UNICODEbuffer[charcount*2+1],HEX);
+        i+=3;charcount++;
       }
      else
      {
@@ -119,10 +120,10 @@ void WaveShare_EPD::DrawUnicodeChar(byte x,int16_t y,byte width,byte height,unsi
   if (height%8==0) sizeofsinglechar=(height/8)*width;
   else sizeofsinglechar=(height/8+1)*width;
  offset=(code[0]*0x100+code[1])*sizeofsinglechar;
-   Serial.println("code[1]");
-   Serial.println(code[1]);
-    Serial.println("sizeofsinglechar");
-   Serial.println(sizeofsinglechar);
+  // Serial.println("code[1]");
+  // Serial.println(code[1]);
+   // Serial.println("sizeofsinglechar");
+  // Serial.println(sizeofsinglechar);
   File f=SPIFFS.open(fontname,"r");
   f.seek(offset,SeekSet);
   char zi[sizeofsinglechar];
@@ -132,8 +133,8 @@ void WaveShare_EPD::DrawUnicodeChar(byte x,int16_t y,byte width,byte height,unsi
      
    Serial.println(zi[i],HEX);
     }*/
-   Serial.println("offset");
-   Serial.println(offset);
+  // Serial.println("offset");
+   //Serial.println(offset);
    if (offset<0xff*sizeofsinglechar && FontIndex<10) 
    {drawXbm(x,y,width,height,(unsigned char *)zi); }
    else  {drawXbm(x,y,width,height,(unsigned char *)zi);}

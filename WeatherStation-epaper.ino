@@ -1,6 +1,6 @@
 /**The MIT License (MIT)
 
-Copyright (c) 2016 by Daniel Eichhorn
+Copyright (c) 2017 by Hui Lu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-See more at http://blog.squix.ch
 */
 
 #include <ESP8266WiFi.h>
@@ -38,29 +37,31 @@ See more at http://blog.squix.ch
 #include "EPD_drive_gpio.h"
 #include "bitmaps.h"
 /***************************
- * Begin Settings
+  Settings
  **************************/
-// Please read http://blog.squix.org/weatherstation-getting-code-adapting-it
-// for setup instructions
-//WiFiManager wifiManager;
-const char* WIFI_SSID = "duckgagaga";
-const char* WIFI_PWD = "0114987395";
-const int UPDATE_INTERVAL_SECS = 10 * 60; // Update every 10 minutes
+//const char* WIFI_SSID = "";
+//const char* WIFI_PWD = "";
 const int sleeptime=60;//min
 const float UTC_OFFSET = 8;
- 
-String city;String lastUpdate = "--";
-bool shouldsave=false;bool updating=false;
-TimeClient timeClient(UTC_OFFSET);heweatherclient heweather;Ticker ticker;Ticker avoidstuck;WaveShare_EPD EPD = WaveShare_EPD();
-// flag changed in the ticker function every 10 minutes
-bool readyForWeatherUpdate = false;
+byte end_time=23;
+byte start_time=8;
+ /***************************
+  **************************/
+String city;
+String lastUpdate = "--";
+bool shouldsave=false;
+bool updating=false; //is in updating progress
+TimeClient timeClient(UTC_OFFSET);
+heweatherclient heweather;
+//Ticker ticker;
+Ticker avoidstuck;
+WaveShare_EPD EPD = WaveShare_EPD();
 
-//declaring prototypes
-void setReadyForWeatherUpdate();
 void saveConfigCallback () {
    shouldsave=true;
 }
 void setup() {
+  check_rtc_mem();
   Serial.begin(115200);Serial.println();Serial.println();
   pinMode(D3,INPUT);
   pinMode(CS,OUTPUT);
@@ -71,28 +72,22 @@ void setup() {
   SPI.beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE0));
   SPI.begin();
   EPD.EPD_init_Part();driver_delay_xms(DELAYTIME);
-  //WiFi.begin(WIFI_SSID, WIFI_PWD);
  
-  /*************************************************
+   /*************************************************
    wifimanager
    *************************************************/
-  WiFiManagerParameter custom_c("city","city","qingdao", 20);
- WiFiManager wifiManager;
- //wifiManager.resetSettings();
+  //WiFi.begin(WIFI_SSID, WIFI_PWD);
+  WiFiManagerParameter custom_c("city","city","your city", 20);
+  WiFiManager wifiManager;
   wifiManager.setAPCallback(configModeCallback);
   wifiManager.setSaveConfigCallback(saveConfigCallback);
-   //WiFiManagerParameter custom_text("<p>input city</p>");
- // wifiManager.addParameter(&custom_text);
- // WiFiManagerParameter custom_a("null","null","ignorethis", 20);
-  //wifiManager.addParameter(&custom_a); 
-  //
   wifiManager.addParameter(&custom_c); 
   wifiManager.autoConnect("Weather widget");
   city= custom_c.getValue();
    /*************************************************
    EPPROM
    *************************************************/
-  if (city!="qingdao")
+  if (city!="your city")
   {
     
          EEPROM.write(0,city.length());
@@ -106,8 +101,7 @@ void setup() {
           }
          EEPROM.commit(); 
     }
-
-  
+   
  byte city_length=EEPROM.read(0);
  Serial.println("EEPROM_CITY-LENGTH:");Serial.println(city_length);
  if (city_length>0)
@@ -124,13 +118,13 @@ void setup() {
 /*************************************************
    update weather
 *************************************************/
-heweather.city="huangdao";
+//heweather.city="huangdao";
 avoidstuck.attach(10,check);
 updating=true;
-updateData();updating=false;
+updateData();
+updating=false;
 updatedisplay();
 
-//ticker.attach(UPDATE_INTERVAL_SECS, setReadyForWeatherUpdate);
 }
 void check()
 {
@@ -149,7 +143,6 @@ void loop() {
  }
  EPD.deepsleep();
  ESP.deepSleep(60 * sleeptime * 1000000);
-
 
 }
 void updatedisplay()
@@ -198,22 +191,21 @@ void updateData() {
   timeClient.updateTime();
   heweather.update();
   lastUpdate = timeClient.getHours()+":"+timeClient.getMinutes();
-  readyForWeatherUpdate = false;
-   Serial.print("heweather.rain");Serial.print(heweather.rain);Serial.print("\n");
-  delay(1000);
+
+  byte rtc_mem[4];rtc_mem[0]=126;
+  byte Hours=timeClient.getHours().toInt();
+  if (Hours=end_time)
+  {
+    if((start_time-end_time)<0)  rtc_mem[1]=(24-Hours+start_time)*60/sleeptime-1;
+    else rtc_mem[1]=(start_time-Hours)*60/sleeptime-1;
+    ESP.rtcUserMemoryWrite(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
+    
+    }
+ 
+  Serial.print("heweather.rain");Serial.print(heweather.rain);Serial.print("\n");
+  //delay(1000);
 }
 
-
-
-
-
-
-
-
-void setReadyForWeatherUpdate() {
-  Serial.println("Setting readyForUpdate to true");
-  readyForWeatherUpdate = true;
-}
 void configModeCallback (WiFiManager *myWiFiManager) {
   Serial.println("Entered config mode");
   Serial.println(WiFi.softAPIP());
@@ -237,5 +229,31 @@ void dis_batt(int16_t x, int16_t y)
   if (batt_voltage>3.7&&batt_voltage<=3.95)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_3);
   if (batt_voltage>3.95&&batt_voltage<=4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_4);
   if (batt_voltage>4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_5);
+  
+  }
+void check_rtc_mem()
+{
+  /*
+  rtc_mem[0] sign for first run
+  rtc_mem[1] how many hours left
+  */
+  byte rtc_mem[4];
+  ESP.rtcUserMemoryRead(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
+  if (rtc_mem[0]!=126)
+  {
+    rtc_mem[0]=126;
+    rtc_mem[1]=0;
+    ESP.rtcUserMemoryWrite(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
+    }
+  else
+  {
+    if(rtc_mem[1]>0) 
+    {
+       rtc_mem[1]--;
+       ESP.rtcUserMemoryWrite(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
+       EPD.deepsleep();
+       ESP.deepSleep(60 * sleeptime * 1000000);
+      }
+    }
   
   }

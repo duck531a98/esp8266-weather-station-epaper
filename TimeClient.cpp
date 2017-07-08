@@ -68,8 +68,8 @@ if (!client.connect("duckduckweather.esy.es", 80)) {
   int size = 0;
   client.setNoDelay(false);
   while(client.connected()) {
-    Serial.println("time server connected");
-    Serial.println(client.available());
+   // Serial.println("time server connected");
+   // Serial.println(client.available());
     while((size = client.available()) > 0) {
   
        
