@@ -25,8 +25,9 @@ See more at http://blog.squix.ch
 
 #include "TimeClient.h"
 
-TimeClient::TimeClient(float utcOffset) {
+TimeClient::TimeClient(float utcOffset, const char * Serverurl) {
   myUtcOffset = utcOffset;
+  server=Serverurl;
 }
 
 void TimeClient::updateTime() {
@@ -34,7 +35,7 @@ void TimeClient::updateTime() {
   const int httpPort = 80;
   Serial.println("updating time");
 
-if (!client.connect("duckduckweather.esy.es", 80)) {
+if (!client.connect(server, 80)) {
     Serial.println("connection failed");
     return;
   }
@@ -43,7 +44,7 @@ if (!client.connect("duckduckweather.esy.es", 80)) {
 
   // This will send the request to the server
   client.print(String("GET /time.php")+ " HTTP/1.1\r\n" +
-             "Host: " + "duckduckweather.esy.es" + "\r\n" +
+             "Host: " + server + "\r\n" +
              "Connection: close\r\n" +
              "\r\n" );
 

@@ -39,10 +39,10 @@ class TimeClient {
     unsigned int localPort = 2390;
     
     byte packetBuffer[ NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets
-
+   const char* server;
     
   public:
-    TimeClient(float utcOffset);
+    TimeClient(float utcOffset,const char * Serverurl);
     void updateTime();
 
     String getHours();

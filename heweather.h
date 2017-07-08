@@ -16,7 +16,9 @@ class heweatherclient: public JsonListener{
 private:
  String currentKey ;
  String currentParent;
+ const char* server;
  public: 
+   heweatherclient(const char * Serverurl);
    String aqi; String co; String no2; String o3;
    String pm10; String pm25; String so2; String aqitext;
    byte airconditionbits_index;

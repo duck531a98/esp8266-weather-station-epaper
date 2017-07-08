@@ -41,18 +41,19 @@ SOFTWARE.
  **************************/
 //const char* WIFI_SSID = "";
 //const char* WIFI_PWD = "";
-const int sleeptime=1;//min
+const int sleeptime=60;//71min maximum
 const float UTC_OFFSET = 8;
-byte end_time=12;
-byte start_time=13;
+byte end_time=23;
+byte start_time=8;
+const char* server="duckduckweather.esy.es";
  /***************************
   **************************/
 String city;
 String lastUpdate = "--";
 bool shouldsave=false;
 bool updating=false; //is in updating progress
-TimeClient timeClient(UTC_OFFSET);
-heweatherclient heweather;
+TimeClient timeClient(UTC_OFFSET,server);
+heweatherclient heweather(server);
 //Ticker ticker;
 Ticker avoidstuck;
 WaveShare_EPD EPD = WaveShare_EPD();
@@ -195,7 +196,9 @@ void updateData() {
 
   byte rtc_mem[4];rtc_mem[0]=126;
   byte Hours=timeClient.getHours().toInt();
-  if (Hours=end_time)
+  Serial.println("hour");
+  Serial.print(Hours);
+  if (Hours==end_time)
   {
     if((start_time-end_time)<0)  rtc_mem[1]=(24-Hours+start_time)*60/sleeptime;
     else rtc_mem[1]=(start_time-Hours)*60/sleeptime;
