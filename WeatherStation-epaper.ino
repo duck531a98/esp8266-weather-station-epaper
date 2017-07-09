@@ -81,25 +81,25 @@ void setup() {
   //WiFi.begin(WIFI_SSID, WIFI_PWD);
   WiFiManagerParameter custom_c("city","city","your city", 20);
   WiFiManager wifiManager;
-  unsigned long timeout=check_config();
-  if (timeout=0)
+   if (read_config()==126)
   {
      EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
     }
-  wifiManager.setConfigPortalTimeout(timeout);
+  wifiManager.setConfigPortalTimeout(60);
   wifiManager.setAPCallback(configModeCallback);
   wifiManager.setSaveConfigCallback(saveConfigCallback);
   wifiManager.addParameter(&custom_c); 
   wifiManager.autoConnect("Weather widget");
   while (WiFi.status() != WL_CONNECTED)
   {
+   check_config();
   Serial.println("failed to connect and hit timeout");
   EPD.clearshadows(); 
   EPD.clearbuffer();
   EPD.fontscale=1;
   EPD.SetFont(0x0);
-  EPD.DrawUTF(0,0,16,16,(unsigned char *)"配置超时，如需重新配置");
-  EPD.DrawUTF(18,0,16,16,(unsigned char *)"关闭电源等待2分钟再开启");
+  EPD.DrawUTF(0,0,16,16,(unsigned char *)"配置失效或超时，如需重新配置");
+  EPD.DrawUTF(18,0,16,16,(unsigned char *)"关闭电源等待几分钟再开启");
   EPD.DrawUTF(36,0,16,16,(unsigned char *)"请在3分钟内完成设置"); 
   EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
   EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
@@ -256,9 +256,17 @@ void dis_batt(int16_t x, int16_t y)
   if (batt_voltage>4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_5);
   
   }
+unsigned long read_config()
+{
+  byte rtc_mem[4];
+  ESP.rtcUserMemoryRead(4, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
+  Serial.println("first time to run check config");
+  return rtc_mem[0];
+  
+  }
 unsigned long check_config()
 {
-   byte rtc_mem[4];
+  byte rtc_mem[4];
   ESP.rtcUserMemoryRead(4, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
   if (rtc_mem[0]!=126)
   {
@@ -269,8 +277,7 @@ unsigned long check_config()
     }
   else
   {
-   
-    return 0;
+     return 44;
     } 
   
   }
