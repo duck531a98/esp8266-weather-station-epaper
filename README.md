@@ -4,8 +4,7 @@ Esp8266 is programed to display weather forecast on 2.9inch e-paper.
 You can get a 2.9inch e-paper display in Waveshare's shop. Buy it on taobao.com if you are in China. https://detail.tmall.com/item.htm?id=550690109675&spm=a1z09.2.0.0.nyL5N4&_u=q2skmgl30cb
 
 Esp8266 is in deep sleeping after update the weather forecast to save battery.
-![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170623_232157.jpg)
-![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170624_214454.jpg)
+
 ![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170624_214405.jpg)
 ![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170623_220040.jpg)
 ![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170705_181156.jpg)
@@ -21,6 +20,12 @@ Esp8266 is in deep sleeping after update the weather forecast to save battery.
 ## Uploading code to esp8266
 Add esp8266 to boards manager in arduino ide. Follow this guide https://github.com/esp8266/Arduino#installing-with-boards-manager.
 Don't forget to upload font files. Follow this guide to upload font files to spiff meomory. https://arduino-esp8266.readthedocs.io/en/latest/filesystem.html#uploading-files-to-file-system.
+
+## Multi language support
+modify the language in lang.h 
+There is Strings for Chinese and English already.
+You can add you own.
+Weahter data supports zh,en,de,es,fr,it,jp,kr,ru,in,th
 
 ## Connect esp8266 to display module
 BUSY---->gpio4
