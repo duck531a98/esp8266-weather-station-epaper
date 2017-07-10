@@ -1,10 +1,10 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include "heweather.h"
-heweatherclient::heweatherclient(const char* Serverurl)
+heweatherclient::heweatherclient(const char* Serverurl,const char* langstring)
 {
   server=Serverurl;
-  
+  lang=langstring;
   }
 byte heweatherclient::getMeteoconIcon(int weathercodeindex) {
   if(weathercodeindex==0) return 12;
@@ -182,7 +182,7 @@ void heweatherclient::update()
   Serial.print("Requesting URL: ");
 
   // This will send the request to the server
-  client.print(String("GET /weather.php?city=")+city + " HTTP/1.1\r\n" +
+  client.print(String("GET /weather.php?city=")+city +"&lang="+lang+" HTTP/1.1\r\n" +
              "Host: " + server + "\r\n" +
              "Connection: close\r\n" +
              "\r\n" );

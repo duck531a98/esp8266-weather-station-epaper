@@ -17,8 +17,9 @@ private:
  String currentKey ;
  String currentParent;
  const char* server;
+ const char* lang;
  public: 
-   heweatherclient(const char * Serverurl);
+   heweatherclient(const char * Serverurl,const char* langstring);
    String aqi; String co; String no2; String o3;
    String pm10; String pm25; String so2; String aqitext;
    byte airconditionbits_index;

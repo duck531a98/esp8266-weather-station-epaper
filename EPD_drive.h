@@ -125,7 +125,7 @@ int UTFtoUNICODE(unsigned char *code);
 void DrawUnicodeChar(byte x,int16_t y,byte width,byte height,unsigned char *code);
 void DrawUnicodeStr(byte x,int16_t y,byte width,byte height,byte strlength,unsigned char *code);
 void drawXbm(int16_t xMove, int16_t yMove, int16_t width, int16_t height,unsigned char *xbm);
-void DrawXbm_P(int16_t xMove, int16_t yMove, int16_t width, int16_t height,unsigned char *xbm);
+void DrawXbm_P(int16_t xMove, int16_t yMove, int16_t width, int16_t height,const unsigned char *xbm);
 	WaveShare_EPD();
  void SetPixel(char x, int y);
   void clearbuffer();

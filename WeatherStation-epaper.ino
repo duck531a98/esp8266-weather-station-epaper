@@ -36,6 +36,7 @@ SOFTWARE.
 #include "EPD_drive.h"
 #include "EPD_drive_gpio.h"
 #include "bitmaps.h"
+#include "lang.h"
 /***************************
   Settings
  **************************/
@@ -46,6 +47,7 @@ const float UTC_OFFSET = 8;
 byte end_time=0;
 byte start_time=8;
 const char* server="duckduckweather.esy.es";
+//modify language in lang.h
  /***************************
   **************************/
 String city;
@@ -53,7 +55,7 @@ String lastUpdate = "--";
 bool shouldsave=false;
 bool updating=false; //is in updating progress
 TimeClient timeClient(UTC_OFFSET,server);
-heweatherclient heweather(server);
+heweatherclient heweather(server,lang);
 //Ticker ticker;
 Ticker avoidstuck;
 WaveShare_EPD EPD = WaveShare_EPD();
@@ -85,7 +87,7 @@ void setup() {
   {
      EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
     }
-  wifiManager.setConfigPortalTimeout(60);
+  wifiManager.setConfigPortalTimeout(180);
   wifiManager.setAPCallback(configModeCallback);
   wifiManager.setSaveConfigCallback(saveConfigCallback);
   wifiManager.addParameter(&custom_c); 
@@ -98,9 +100,10 @@ void setup() {
   EPD.clearbuffer();
   EPD.fontscale=1;
   EPD.SetFont(0x0);
-  EPD.DrawUTF(0,0,16,16,(unsigned char *)"配置失效或超时，如需重新配置");
-  EPD.DrawUTF(18,0,16,16,(unsigned char *)"关闭电源等待几分钟再开启");
-  EPD.DrawUTF(36,0,16,16,(unsigned char *)"请在3分钟内完成设置"); 
+  EPD.DrawUTF(0,0,16,16,config_timeout_line1);
+  EPD.DrawUTF(18,0,16,16,config_timeout_line2);
+  EPD.DrawUTF(36,0,16,16,config_timeout_line3); 
+  EPD.DrawUTF(52,0,16,16,config_timeout_line4); 
   EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
   EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
   }
@@ -181,13 +184,13 @@ void updatedisplay()
     Serial.println(heweather.citystr);
     EPD.DrawUTF(96,60,16,16,heweather.citystr);//城市名
     EPD.DrawUTF(112,60,16,16,heweather.date.substring(5, 10));
-    EPD.DrawUTF(0,145,16,16,(unsigned char *)"今天");EPD.DrawUTF(16,145,16,16,heweather.today_tmp_min+"°~"+heweather.today_tmp_max+"°"+heweather.today_txt_d);
-    EPD.DrawUTF(33,145,16,16,(unsigned char *)"明天");EPD.DrawUTF(49,145,16,16,heweather.tomorrow_tmp_min+"°~"+heweather.tomorrow_tmp_max+"°"+heweather.tomorrow_txt_d);
-    EPD.DrawUTF(70,116,16,16,"空气质量："+heweather.qlty);
+    EPD.DrawUTF(0,145,16,16,todaystr);EPD.DrawUTF(16,145,16,16,heweather.today_tmp_min+"°~"+heweather.today_tmp_max+"°"+heweather.today_txt_d);
+    EPD.DrawUTF(33,145,16,16,tomorrowstr);EPD.DrawUTF(49,145,16,16,heweather.tomorrow_tmp_min+"°~"+heweather.tomorrow_tmp_max+"°"+heweather.tomorrow_txt_d);
+    EPD.DrawUTF(70,116,16,16,airstr+heweather.qlty);
     EPD.DrawUTF(86,116,16,16,"RH:"+heweather.now_hum+"%"+" "+heweather.now_dir+heweather.now_sc);
-    EPD.DrawUTF(102,116,16,16,"今天夜间"+heweather.today_txt_n);
+    EPD.DrawUTF(102,116,16,16,tonightstr+heweather.today_txt_n);
     EPD.SetFont(0x2);
-    EPD.DrawUTF(0,250,10,10,lastUpdate);//updatetime
+  //  EPD.DrawUTF(0,250,10,10,lastUpdate);//updatetime
    // float voltage=(float)(analogRead(A0))/1024;
    // String voltagestring=(String)((voltage+0.083)*13/3);
    // EPD.DrawUTF(10,270,10,10,voltagestring+"V");
@@ -238,9 +241,21 @@ void configModeCallback (WiFiManager *myWiFiManager) {
   //进入配置模式
   
   EPD.clearshadows(); EPD.clearbuffer();EPD.fontscale=1;
-  //EPD.SetFont(0x0);
-  //EPD.DrawUTF(0,0,16,16,(unsigned char *)"WIFI未连接，请连接“Weather Widget”");
-  EPD.DrawXbm_P(0,0,296,128,(unsigned char *)configpage);
+  EPD.SetFont(0x0);
+  EPD.fontscale=1;
+  EPD.DrawXbm_P(6,80,32,32,one);
+  EPD.DrawXbm_P(42,80,32,32,two);
+  EPD.DrawXbm_P(79,80,32,32,three);
+  EPD.fontscale=1;
+  EPD.DrawUTF(6,112,16,16,config_page_line1);
+  EPD.DrawUTF(22,112,16,16,config_page_line2);
+  EPD.DrawXline(80,295,39);
+  EPD.DrawUTF(42,112,16,16,config_page_line3);
+  EPD.DrawUTF(58,112,16,16,config_page_line4);
+  EPD.DrawXline(80,295,76);
+  EPD.DrawUTF(79,112,16,16,config_page_line5);
+  EPD.DrawUTF(94,112,16,16,config_page_line6);
+  EPD.DrawXbm_P(6,0,70,116,phone);
   EPD.EPD_Dis_Part(0,127,0,295,(unsigned char *)EPD.EPDbuffer,1);
   driver_delay_xms(DELAYTIME);
 }

@@ -193,7 +193,7 @@ void WaveShare_EPD::drawXbm(int16_t xMove, int16_t yMove, int16_t width, int16_t
   }
 }
 
-void WaveShare_EPD::DrawXbm_P(int16_t xMove, int16_t yMove, int16_t width, int16_t height,unsigned char *xbm) {
+void WaveShare_EPD::DrawXbm_P(int16_t xMove, int16_t yMove, int16_t width, int16_t height,const unsigned char *xbm) {
  int16_t heightInXbm = (height + 7) / 8;
  uint8_t data;
  //unsigned char temp[heightInXbm*width];
