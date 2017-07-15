@@ -5,15 +5,13 @@ You can get a 2.9inch e-paper display in Waveshare's shop. Buy it on taobao.com 
 
 Esp8266 is in deep sleeping after update the weather forecast to save battery.
 
-![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170624_214405.jpg)
-![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170623_220040.jpg)
-![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170705_181156.jpg)
-![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170707232515.jpg)
+![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170715_113425.jpg)
+
 ![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170705_221111.jpg)
 
 ## BOM
 1. 2.9inch e-paper from Waveshare
-2. Nodemcu or Wemos or integrated PCB( gerber files in /PCB folder not published yet )
+2. Nodemcu or Wemos or integrated PCB( gerber files in /PCB folder)
 3. Li-Po battery
 4. 3d printed case(STL files in /3d folder still in revising )
 
