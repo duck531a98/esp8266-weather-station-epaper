@@ -42,12 +42,14 @@ SOFTWARE.
  **************************/
 //const char* WIFI_SSID = "";
 //const char* WIFI_PWD = "";
-const int sleeptime=60;//71min maximum
+const int sleeptime=60;     //updating interval 71min maximum
 const float UTC_OFFSET = 8;
-byte end_time=0;
-byte start_time=8;
+byte end_time=0;            //time that stops to update weather forecast
+byte start_time=7;          //time that starts to update weather forecast
 const char* server="duckduckweather.esy.es";
+
 //modify language in lang.h
+
  /***************************
   **************************/
 String city;

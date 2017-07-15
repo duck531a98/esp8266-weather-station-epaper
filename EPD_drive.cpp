@@ -216,8 +216,8 @@ void WaveShare_EPD::DrawXbm_P(int16_t xMove, int16_t yMove, int16_t width, int16
 }
 void WaveShare_EPD::SetPixel(char x, int y)
 { 
- 
-    EPDbuffer[x/8+y*xDot/8]&=~(0x80>>x%8) ;
+    if(x<128&&y<296)  EPDbuffer[x/8+y*xDot/8]&=~(0x80>>x%8) ;
+   
  
   }
 void WaveShare_EPD::clearbuffer()
