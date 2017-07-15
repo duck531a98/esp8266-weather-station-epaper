@@ -7,7 +7,9 @@ Esp8266 is in deep sleeping after update the weather forecast to save battery.
 
 ![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170715_113425.jpg)
 
-![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170705_221111.jpg)
+![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170715_152231.jpg)
+
+![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170715_152306.jpg)
 
 ## BOM
 1. 2.9inch e-paper from Waveshare
