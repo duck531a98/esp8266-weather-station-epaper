@@ -216,7 +216,7 @@ void WaveShare_EPD::DrawXbm_P(int16_t xMove, int16_t yMove, int16_t width, int16
 }
 void WaveShare_EPD::SetPixel(char x, int y)
 { 
-    if(x<128&&y<296)  EPDbuffer[x/8+y*xDot/8]&=~(0x80>>x%8) ;
+    if(x<xDot&&y<yDot)  EPDbuffer[x/8+y*xDot/8]&=~(0x80>>x%8) ;
    
  
   }
@@ -228,9 +228,9 @@ void WaveShare_EPD::clearbuffer()
 void WaveShare_EPD::clearshadows()
 {
  unsigned char temp[]={0x00};
- EPD_Dis_Part(0,127,0,295,(unsigned char *)temp,0);
+  EPD_Dis_Part(0,xDot-1,0,yDot-1,(unsigned char *)temp,0);
 temp[0]=0xff;
- EPD_Dis_Part(0,127,0,295,(unsigned char *)temp,0);
+ EPD_Dis_Part(0,yDot-1,0,yDot-1,(unsigned char *)temp,0);
   }
 unsigned char WaveShare_EPD::ReadBusy(void)
 {

@@ -8,6 +8,7 @@
               Register table
 **************-------------------------------------------**************/
 #define EPD2X9 1
+//#define EPD1X54  1
 #ifdef EPD2X9
   #define xDot 128
   #define yDot 296
