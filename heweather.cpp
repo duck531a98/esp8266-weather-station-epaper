@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include "heweather.h"
+
 heweatherclient::heweatherclient(const char* Serverurl,const char* langstring)
 {
   server=Serverurl;
@@ -143,6 +144,7 @@ if(currentParent=="thedayaftertomorrow")
  if(currentKey=="city") citystr=value;
  if(currentKey=="date") date=value;
    if(currentKey=="qlty") qlty=value;
+   if(currentKey="message") message=value;
   Serial.println("value: " + value);
 }
 
@@ -182,7 +184,7 @@ void heweatherclient::update()
   Serial.print("Requesting URL: ");
 
   // This will send the request to the server
-  client.print(String("GET /weather.php?city=")+city +"&lang="+lang+" HTTP/1.1\r\n" +
+  client.print(String("GET /weather.php?city=")+city +"&lang="+lang+"&client_name="+client_name+" HTTP/1.1\r\n" +
              "Host: " + server + "\r\n" +
              "Connection: close\r\n" +
              "\r\n" );

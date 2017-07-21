@@ -3,6 +3,8 @@ error_reporting(E_ERROR | E_PARSE);
 date_default_timezone_set("Asia/Shanghai");
 $city=$_GET["city"];echo $city;
 $lang=$_GET["lang"];
+$client_name=$_GET["client_name"];
+$message;
 class weather{
     public $aqi;
     public $now;
@@ -18,6 +20,16 @@ if (!$con)
   echo 'error sql connect';
   }
 //mysqli_select_db("id2064398_database", $con);  
+$result_message=mysqli_query($con,"SELECT * FROM message WHERE client_name='".$client_name."'");
+if(mysqli_num_rows($result_message)==0)
+{
+$message=" ";
+}
+else
+{
+$row=mysqli_fetch_array($result_message);
+$message=$row['message'];
+}
 $result=mysqli_query($con,"SELECT * FROM weatherdata WHERE city='".$city."' AND lang='".$lang."'");
 if(mysqli_num_rows($result)==0)
 {
@@ -95,6 +107,6 @@ $weatherdata->thedayaftertomorrow->tmpmax=$obj->HeWeather5[0]->daily_forecast[2]
 $weatherdata->thedayaftertomorrow->tmpmin=$obj->HeWeather5[0]->daily_forecast[2]->tmp->min;
 
 $weatherdata->city=$obj->HeWeather5[0]->basic->city;
-
+$weatherdata->message=$message;
 echo json_encode($weatherdata,JSON_UNESCAPED_UNICODE);
 ?>  

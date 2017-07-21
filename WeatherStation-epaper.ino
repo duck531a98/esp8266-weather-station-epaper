@@ -45,9 +45,9 @@ SOFTWARE.
 const int sleeptime=60;     //updating interval 71min maximum
 const float UTC_OFFSET = 8;
 byte end_time=0;            //time that stops to update weather forecast
-byte start_time=7;          //time that starts to update weather forecast
+byte start_time=5;          //time that starts to update weather forecast
 const char* server="duckduckweather.esy.es";
-
+const char* client_name="luhui"; //send message to weather station via duckduckweather.esy.es/client.php
 //modify language in lang.h
 
  /***************************
@@ -58,6 +58,7 @@ bool shouldsave=false;
 bool updating=false; //is in updating progress
 TimeClient timeClient(UTC_OFFSET,server);
 heweatherclient heweather(server,lang);
+
 //Ticker ticker;
 Ticker avoidstuck;
 WaveShare_EPD EPD = WaveShare_EPD();
@@ -78,7 +79,7 @@ void setup() {
   SPI.beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE0));
   SPI.begin();
   EPD.EPD_init_Part();driver_delay_xms(DELAYTIME);
- 
+ heweather.client_name=client_name;
    /*************************************************
    wifimanager
    *************************************************/
@@ -184,13 +185,18 @@ void updatedisplay()
     EPD.SetFont(0x0);
     Serial.println("heweather.citystr");
     Serial.println(heweather.citystr);
-    EPD.DrawUTF(96,60,16,16,heweather.citystr);//城市名
-    EPD.DrawUTF(112,60,16,16,heweather.date.substring(5, 10));
+     EPD.DrawXbm_P(80,5,16,16,(unsigned char *)city_icon);EPD.DrawUTF(80,21,16,16,heweather.citystr);//城市名
+    EPD.DrawUTF(96,70,16,16,heweather.date.substring(0, 4));
+    EPD.DrawUTF(112,70,16,16,heweather.date.substring(5, 10));
     EPD.DrawUTF(3,145,16,16,todaystr);EPD.DrawUTF(19,145,16,16,heweather.today_tmp_min+"°~"+heweather.today_tmp_max+"°"+heweather.today_txt_d);
     EPD.DrawUTF(36,145,16,16,tomorrowstr);EPD.DrawUTF(52,145,16,16,heweather.tomorrow_tmp_min+"°~"+heweather.tomorrow_tmp_max+"°"+heweather.tomorrow_txt_d);
-    EPD.DrawUTF(73,116,16,16,airstr+heweather.qlty);
-    EPD.DrawUTF(89,116,16,16,"RH:"+heweather.now_hum+"%"+" "+heweather.now_dir+heweather.now_sc);
-    EPD.DrawUTF(105,116,16,16,tonightstr+heweather.today_txt_n);
+   EPD.DrawXbm_P(73,116,16,16,(unsigned char *)aqi_icon); EPD.DrawUTF(73,135,16,16,airstr+heweather.qlty);
+   // EPD.DrawUTF(86,116,16,16,"RH:"+heweather.now_hum+"%"+" "+heweather.now_dir+heweather.now_sc);
+    EPD.DrawXbm_P(89,116,16,16,(unsigned char *)night);  EPD.DrawUTF(89,135,16,16,tonightstr+heweather.today_txt_n);
+
+    // EPD.DrawXline(114,295,105);
+    EPD.DrawXbm_P(107,116,16,16,(unsigned char *)message);
+     EPD.DrawUTF(107,135,16,16,heweather.message);
     EPD.SetFont(0x2);
   //  EPD.DrawUTF(0,250,10,10,lastUpdate);//updatetime
    // float voltage=(float)(analogRead(A0))/1024;
@@ -198,7 +204,7 @@ void updatedisplay()
    // EPD.DrawUTF(10,270,10,10,voltagestring+"V");
     EPD.SetFont(0x1);
     EPD.DrawUTF(96,5,32,32,heweather.now_tmp+"°");//天气实况温度
-    EPD.DrawYline(96,127,57);
+    EPD.DrawYline(96,127,67);
     dis_batt(3,272);
    
     

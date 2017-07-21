@@ -24,6 +24,7 @@ private:
    String pm10; String pm25; String so2; String aqitext;
    byte airconditionbits_index;
    bool rain=0;
+   const char* client_name;
 
    String now_cond;
    String now_hum;
@@ -48,6 +49,7 @@ private:
    String tomorrow_tmp_max;
    String tomorrow_tmp_min;
  String tomorrow_txt_d;
+ String message;
  
    String thedayaftertomorrow_cond_d;
    String thedayaftertomorrow_cond_d_index;
