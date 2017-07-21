@@ -47,7 +47,7 @@ const float UTC_OFFSET = 8;
 byte end_time=0;            //time that stops to update weather forecast
 byte start_time=5;          //time that starts to update weather forecast
 const char* server="duckduckweather.esy.es";
-const char* client_name="luhui"; //send message to weather station via duckduckweather.esy.es/client.php
+const char* client_name=""; //send message to weather station via duckduckweather.esy.es/client.php
 //modify language in lang.h
 
  /***************************
