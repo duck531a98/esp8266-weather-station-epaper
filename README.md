@@ -11,6 +11,8 @@ Esp8266 is in deep sleeping after update the weather forecast to save battery.
 
 ![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170715_152306.jpg)
 
+![](https://github.com/duck531a98/esp8266-weather-station-epaper/raw/master/pics/20170721_232400.jpg)
+
 ## BOM
 1. 2.9inch e-paper from Waveshare
 2. Nodemcu or Wemos or integrated PCB( gerber files in /PCB folder)
@@ -38,6 +40,9 @@ DIN---->gpio13
 Connect gpio16 to rst on esp8266 to wakeup esp8266 from deep sleeping with internal timer.
 
 There will be two versions of my pcb. One without epaper driving components and One with driving components. I'm still testing them to make sure they are reliable. Also Mike is making that board, too.
+
+## Send message to weather station
+you can set a client name for your weather station in the program and send message to it (http://duckduckweather.esy.es/client.php). Useful to please girls.
 
 ## Font
 I developped this tool to generate your own font (unicode ucs-2)
