@@ -177,20 +177,20 @@ void updatedisplay()
     EPD.clearshadows(); EPD.clearbuffer();EPD.fontscale=1; 
     
     EPD.SetFont(12);unsigned char code[]={0x00,heweather.getMeteoconIcon(heweather.now_cond_index.toInt())};EPD.DrawUnicodeStr(0,16,80,80,1,code);
-    EPD.SetFont(13);unsigned char code2[]={0x00,heweather.getMeteoconIcon(heweather.today_cond_d_index.toInt())};EPD.DrawUnicodeStr(0,113,32,32,1,code2);
-    EPD.SetFont(13);unsigned char code3[]={0x00,heweather.getMeteoconIcon(heweather.tomorrow_cond_d_index.toInt())};EPD.DrawUnicodeStr(33,113,32,32,1,code3);
-    EPD.DrawXline(114,295,31);EPD.DrawXline(114,295,66);
+    EPD.SetFont(13);unsigned char code2[]={0x00,heweather.getMeteoconIcon(heweather.today_cond_d_index.toInt())};EPD.DrawUnicodeStr(3,113,32,32,1,code2);
+    EPD.SetFont(13);unsigned char code3[]={0x00,heweather.getMeteoconIcon(heweather.tomorrow_cond_d_index.toInt())};EPD.DrawUnicodeStr(36,113,32,32,1,code3);
+    EPD.DrawXline(114,295,34);EPD.DrawXline(114,295,69);
     
     EPD.SetFont(0x0);
     Serial.println("heweather.citystr");
     Serial.println(heweather.citystr);
     EPD.DrawUTF(96,60,16,16,heweather.citystr);//城市名
     EPD.DrawUTF(112,60,16,16,heweather.date.substring(5, 10));
-    EPD.DrawUTF(0,145,16,16,todaystr);EPD.DrawUTF(16,145,16,16,heweather.today_tmp_min+"°~"+heweather.today_tmp_max+"°"+heweather.today_txt_d);
-    EPD.DrawUTF(33,145,16,16,tomorrowstr);EPD.DrawUTF(49,145,16,16,heweather.tomorrow_tmp_min+"°~"+heweather.tomorrow_tmp_max+"°"+heweather.tomorrow_txt_d);
-    EPD.DrawUTF(70,116,16,16,airstr+heweather.qlty);
-    EPD.DrawUTF(86,116,16,16,"RH:"+heweather.now_hum+"%"+" "+heweather.now_dir+heweather.now_sc);
-    EPD.DrawUTF(102,116,16,16,tonightstr+heweather.today_txt_n);
+    EPD.DrawUTF(3,145,16,16,todaystr);EPD.DrawUTF(19,145,16,16,heweather.today_tmp_min+"°~"+heweather.today_tmp_max+"°"+heweather.today_txt_d);
+    EPD.DrawUTF(36,145,16,16,tomorrowstr);EPD.DrawUTF(52,145,16,16,heweather.tomorrow_tmp_min+"°~"+heweather.tomorrow_tmp_max+"°"+heweather.tomorrow_txt_d);
+    EPD.DrawUTF(73,116,16,16,airstr+heweather.qlty);
+    EPD.DrawUTF(89,116,16,16,"RH:"+heweather.now_hum+"%"+" "+heweather.now_dir+heweather.now_sc);
+    EPD.DrawUTF(105,116,16,16,tonightstr+heweather.today_txt_n);
     EPD.SetFont(0x2);
   //  EPD.DrawUTF(0,250,10,10,lastUpdate);//updatetime
    // float voltage=(float)(analogRead(A0))/1024;
@@ -199,7 +199,7 @@ void updatedisplay()
     EPD.SetFont(0x1);
     EPD.DrawUTF(96,5,32,32,heweather.now_tmp+"°");//天气实况温度
     EPD.DrawYline(96,127,57);
-    dis_batt(0,275);
+    dis_batt(3,272);
    
     
     for(int i=0;i<1808;i++) EPD.EPDbuffer[i]=~EPD.EPDbuffer[i];

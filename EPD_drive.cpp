@@ -230,7 +230,7 @@ void WaveShare_EPD::clearshadows()
  unsigned char temp[]={0x00};
   EPD_Dis_Part(0,xDot-1,0,yDot-1,(unsigned char *)temp,0);
 temp[0]=0xff;
- EPD_Dis_Part(0,yDot-1,0,yDot-1,(unsigned char *)temp,0);
+ EPD_Dis_Part(0,xDot-1,0,yDot-1,(unsigned char *)temp,0);
   }
 unsigned char WaveShare_EPD::ReadBusy(void)
 {
