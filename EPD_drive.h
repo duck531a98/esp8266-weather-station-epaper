@@ -1,5 +1,5 @@
 
- extern unsigned char UNICODEbuffer[100];
+ extern unsigned char UNICODEbuffer[200];
  extern String fontname;
 #ifndef _EPD_DRIVE_H_
 #define _EPD_DRIVE_H_
@@ -117,6 +117,7 @@ class WaveShare_EPD {
 public:
 void deepsleep(void);
 byte fontscale;byte FontIndex;int16_t CurrentCursor;unsigned char EPDbuffer[xDot*yDot/8];
+byte fontwidth;byte fontheight;
  void DrawYline(byte start,byte end, byte y);
  void DrawXline(int start,int end, byte x);
 void SetFont(byte fontindex);

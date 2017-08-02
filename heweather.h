@@ -49,6 +49,7 @@ private:
    String tomorrow_tmp_max;
    String tomorrow_tmp_min;
  String tomorrow_txt_d;
+ String tomorrow_txt_n;
  String message;
  
    String thedayaftertomorrow_cond_d;

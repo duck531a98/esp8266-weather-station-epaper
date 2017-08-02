@@ -51,7 +51,7 @@ if($minute>=60.0)
 echo 'new';
 $url="https://free-api.heweather.com/v5/weather?city=".$city."&key=fab38a62dcaa4630aa9eac1a3ae097aa&lang=".$lang;  
 $html = file_get_contents($url); 
-mysqli_query($con,"UPDATE weatherdata SET weatherdata='".$html."', updatetime='".date("Y-m-d H:i:s")."' , lang='".$lang."' WHERE city='".$city."'");
+mysqli_query($con,"UPDATE weatherdata SET weatherdata='".$html."', updatetime='".date("Y-m-d H:i:s")."' , lang='".$lang."' WHERE city='".$city."' AND lang='".$lang."'");
 
 }	
 else
@@ -93,6 +93,7 @@ $weatherdata->today->date=$obj->HeWeather5[0]->daily_forecast[0]->date;
 
 $weatherdata->tomorrow->cond_d=$obj->HeWeather5[0]->daily_forecast[1]->cond->code_d;
 $weatherdata->tomorrow->txt_d=$obj->HeWeather5[0]->daily_forecast[1]->cond->txt_d;
+$weatherdata->tomorrow->txt_n=$obj->HeWeather5[0]->daily_forecast[1]->cond->txt_n;
 $weatherdata->tomorrow->cond_d_index=$arr[$obj->HeWeather5[0]->daily_forecast[1]->cond->code_d];
 $weatherdata->tomorrow->cond_n=$obj->HeWeather5[0]->daily_forecast[1]->cond->code_n;
 $weatherdata->tomorrow->cond_n_index=$arr[$obj->HeWeather5[0]->daily_forecast[1]->cond->code_n];

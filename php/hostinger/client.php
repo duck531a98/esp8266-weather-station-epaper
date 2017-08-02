@@ -19,11 +19,12 @@
   </tr>
   <tr>
     <td>message</td>
-    <td><input name="message" type="text" maxlength="50" /></td>
+    <td><textarea name="message" rows="3" cols="26"></textarea>
+</td>
   </tr>
-</table>
-
-<input type='submit' value='submit'>
+ <tr>
+<td><input type='submit' value='submit'><td>
+</tr>
 </form>
 <script type="text/javascript">
 

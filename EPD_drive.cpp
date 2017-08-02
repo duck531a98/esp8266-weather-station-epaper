@@ -3,7 +3,7 @@
 #include "EPD_drive_gpio.h"
 
 
-unsigned char UNICODEbuffer[100];
+unsigned char UNICODEbuffer[200];
 String fontname;
 /***********************************************************************************************************************
 			------------------------------------------------------------------------
@@ -27,17 +27,19 @@ void WaveShare_EPD::SetFont(byte fontindex)
      switch (fontindex)
      {
      case 0:
-     fontname="/font16";break;
+     fontname="/font16";fontwidth=16;fontheight=16;break;
      case 1:
-     fontname="/font32";break;
+     fontname="/font32";fontwidth=32;fontheight=32;break;
      case 2:
-     fontname="/font10";break;
+     fontname="/font10";fontwidth=10;fontheight=10;break;
+     case 3:
+     fontname="/font12";fontwidth=12;fontheight=12;break;
      case 11:
-     fontname="/weathericon";break;
+     fontname="/weathericon";fontwidth=32;fontheight=32;break;
      case 12:
-     fontname="/weathericon80";break;
+     fontname="/weathericon80";fontwidth=80;fontheight=80;break;
       case 13:
-     fontname="/weathericon32";break;
+     fontname="/weathericon32";fontwidth=32;fontheight=32;break;
      }
   }
  void WaveShare_EPD::DrawXline(int start,int end, byte x)
@@ -56,8 +58,8 @@ void WaveShare_EPD::SetFont(byte fontindex)
   }
 void WaveShare_EPD::DrawUTF(byte x,int16_t y,byte width,byte height,String code)
 {
-  char buffer[100];
-  code.toCharArray(buffer,100);
+  char buffer[200];
+  code.toCharArray(buffer,200);
   DrawUTF(x,y,width,height,(unsigned char *)buffer);
   }
 void WaveShare_EPD::DrawUTF(byte x,int16_t y,byte width,byte height,unsigned char *code)
@@ -149,6 +151,7 @@ void WaveShare_EPD::DrawUnicodeStr(byte x,int16_t y,byte width,byte height,byte 
   if (height%8==0) sizeofsinglechar=(height/8)*width;
   else sizeofsinglechar=(height/8+1)*width;
   int ymove=0;
+  int xmove=0;
   strlength*=2;
   int i=0;
   while(i<strlength)
@@ -157,18 +160,22 @@ void WaveShare_EPD::DrawUnicodeStr(byte x,int16_t y,byte width,byte height,byte 
       offset=(code[i]*0x100+code[i+1])*sizeofsinglechar;
       if (offset<0xff*sizeofsinglechar) 
       {
-      DrawUnicodeChar(x,y+ymove,width,height,(unsigned char *)code+i);
+      
+      DrawUnicodeChar(x+xmove,y+ymove,width,height,(unsigned char *)code+i);
       ymove+=CurrentCursor+1;
+      if((y+ymove+width)>=yDot-1) {xmove+=height+1;ymove=0;CurrentCursor=0;}
     }
     else if(fontscale==2)
     {
-      DrawUnicodeChar(x,y+ymove,width,height,(unsigned char *)code+i);
+      DrawUnicodeChar(x+xmove,y+ymove,width,height,(unsigned char *)code+i);
       ymove+=width*2;
+      if((y+ymove+width*2)>=yDot-1) {xmove+=height+1;ymove=0;CurrentCursor=0;}
       }
     else
     {
-      DrawUnicodeChar(x,y+ymove,width,height,(unsigned char *)code+i);
+      DrawUnicodeChar(x+xmove,y+ymove,width,height,(unsigned char *)code+i);
       ymove+=width;
+      if((y+ymove+width)>=yDot-1) {xmove+=height+1;ymove=0;CurrentCursor=0;}
       }
     i++;i++;
     }

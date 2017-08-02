@@ -112,7 +112,8 @@ if(currentParent=="tomorrow")
   if(currentKey=="cond_n_index") tomorrow_cond_n_index=value;
   if(currentKey=="tmpmax") tomorrow_tmp_max=value;
   if(currentKey=="tmpmin") tomorrow_tmp_min=value;
-   if(currentKey=="txt_d") tomorrow_txt_d=value;
+  if(currentKey=="txt_d") tomorrow_txt_d=value;
+  if(currentKey=="txt_n") tomorrow_txt_n=value;
   }
 
 if(currentParent=="thedayaftertomorrow")
