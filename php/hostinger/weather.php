@@ -13,7 +13,7 @@ class weather{
     public $thedayaftertomorrow;
     public $city;
 }
-$con = mysqli_connect("localhost","u865951729_admin","041213","u865951729_data");
+$con = mysqli_connect("localhost","duckweather","duckweather","duckweather");
 if (!$con)
   {
   die('Could not connect: ' . mysqli_error());

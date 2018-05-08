@@ -44,10 +44,10 @@ SOFTWARE.
 //const char* WIFI_PWD = "";
 const int sleeptime=60;     //updating interval 71min maximum
 const float UTC_OFFSET = 8;
-byte end_time=5;            //time that stops to update weather forecast
-byte start_time=5;          //time that starts to update weather forecast
-const char* server="duckduckweather.esy.es";
-const char* client_name="mike"; //send message to weather station via duckduckweather.esy.es/client.php
+byte end_time=1;            //time that stops to update weather forecast
+byte start_time=7;          //time that starts to update weather forecast
+const char* server="www.duckweather.tk";
+const char* client_name=""; //send message to weather station via duckduckweather.esy.es/client.php
 //modify language in lang.h
 
  /***************************

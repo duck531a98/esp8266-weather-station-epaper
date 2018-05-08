@@ -1,7 +1,7 @@
 <?php 
 $client_name=$_GET["client_name"];
 $message=$_GET["message"];
-$con = mysqli_connect("localhost","u865951729_admin","041213","u865951729_data");
+$con = mysqli_connect("localhost","duckweather","duckweather","duckweather");
 if (!$con)
   {
   die('Could not connect: ' . mysqli_error());

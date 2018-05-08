@@ -1,4 +1,5 @@
 # Esp8266-weather-station-epaper
+中文版说明在这里http://hlu.lu/2017/07/06/esp8266%E7%94%B5%E7%BA%B8%E5%B1%8F%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5%E7%AB%99/
 ## Summary
 Esp8266 is programed to display weather forecast on 2.9inch e-paper.
 You can get a 2.9inch e-paper display in Waveshare's shop. Buy it on taobao.com if you are in China. https://detail.tmall.com/item.htm?id=550690109675&spm=a1z09.2.0.0.nyL5N4&_u=q2skmgl30cb
@@ -42,7 +43,7 @@ Connect gpio16 to rst on esp8266 to wakeup esp8266 from deep sleeping with inter
 There will be two versions of my pcb. One without epaper driving components and One with driving components. I'm still testing them to make sure they are reliable. Also Mike is making that board, too.
 
 ## Send message to weather station
-you can set a client name for your weather station in the program and send message to it (http://duckduckweather.esy.es/client.php). Useful to please girls.
+you can set a client name for your weather station in the program and send message to it (http://duckweather.tk/client.php). Useful to please girls.
 
 ## Font
 I developped this tool to generate your own font (unicode ucs-2)
