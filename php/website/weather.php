@@ -33,7 +33,7 @@ $message=$row['message'];
 $result=mysqli_query($con,"SELECT * FROM weatherdata WHERE city='".$city."' AND lang='".$lang."'");
 if(mysqli_num_rows($result)==0)
 {
-$url="https://free-api.heweather.com/v5/weather?city=".$city."&key=fab38a62dcaa4630aa9eac1a3ae097aa&lang=".$lang;  
+$url="https://free-api.heweather.com/v5/weather?city=".$city."&key=ae71d94bace847879eadddad28e17776&lang=".$lang;  
 $html = file_get_contents($url); 
 mysqli_query($con,"INSERT INTO weatherdata (city, lang, weatherdata, updatetime) VALUES ('".$city."', '".$lang."','".$html."','".date("Y-m-d H:i:s")."')");
 //mysqli_query($con,"INSERT INTO weatherdata (city, weatherdata, updatetime) VALUES ('test', 'data', '2017-6-10 15:15:15')");
@@ -49,7 +49,7 @@ $minute=(strtotime(date("Y-m-d H:i:s"))-strtotime($row['updatetime']))/60;
 if($minute>=60.0)
 {
 echo 'new';
-$url="https://free-api.heweather.com/v5/weather?city=".$city."&key=fab38a62dcaa4630aa9eac1a3ae097aa&lang=".$lang;  
+$url="https://free-api.heweather.com/v5/weather?city=".$city."&key=ae71d94bace847879eadddad28e17776&lang=".$lang;  
 $html = file_get_contents($url); 
 mysqli_query($con,"UPDATE weatherdata SET weatherdata='".$html."', updatetime='".date("Y-m-d H:i:s")."' , lang='".$lang."' WHERE city='".$city."' AND lang='".$lang."'");
 

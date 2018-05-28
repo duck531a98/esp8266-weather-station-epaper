@@ -1,5 +1,14 @@
 # Esp8266-weather-station-epaper
 中文版说明在这里http://hlu.lu/2017/07/06/esp8266%E7%94%B5%E7%BA%B8%E5%B1%8F%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5%E7%AB%99/
+
+## Changelog
+2015/5/28
+1.change voltage divder resistor form 1M and 300K to 300K and 100K.
+2.change the equation for battery voltage caculation
+3.when battery voltage is lower than 3.4V, no more updating, warning on screen.
+
+You'd better calibrate the adc yourself. ADC on esp is not that accurate.
+
 ## Summary
 Esp8266 is programed to display weather forecast on 2.9inch e-paper.
 You can get a 2.9inch e-paper display in Waveshare's shop. Buy it on taobao.com if you are in China. https://detail.tmall.com/item.htm?id=550690109675&spm=a1z09.2.0.0.nyL5N4&_u=q2skmgl30cb

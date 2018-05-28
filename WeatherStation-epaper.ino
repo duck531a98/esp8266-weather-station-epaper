@@ -97,7 +97,7 @@ void setup() {
   wifiManager.autoConnect("Weather widget");
   while (WiFi.status() != WL_CONNECTED)
   {
-   check_config();
+   always_sleep();
   Serial.println("failed to connect and hit timeout");
   EPD.clearshadows(); 
   EPD.clearbuffer();
@@ -199,9 +199,7 @@ void updatedisplay()
      EPD.DrawUTF(76,131,12,12,heweather.message);
     EPD.SetFont(0x2);
   //  EPD.DrawUTF(0,250,10,10,lastUpdate);//updatetime
-   // float voltage=(float)(analogRead(A0))/1024;
-   // String voltagestring=(String)((voltage+0.083)*13/3);
-   // EPD.DrawUTF(10,270,10,10,voltagestring+"V");
+   
     EPD.SetFont(0x1);
     EPD.DrawUTF(96,5,32,32,heweather.now_tmp+"°");//天气实况温度
     EPD.DrawYline(96,127,67);
@@ -269,40 +267,46 @@ void configModeCallback (WiFiManager *myWiFiManager) {
 }
 void dis_batt(int16_t x, int16_t y)
 {
-  float voltage=(float)(analogRead(A0))/1024;
-  float batt_voltage=(voltage+0.083)*13/3;
-  if (batt_voltage<=3.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_0);
-  if (batt_voltage>3.2&&batt_voltage<=3.45)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_1);
-  if (batt_voltage>3.45&&batt_voltage<=3.7)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_2);
-  if (batt_voltage>3.7&&batt_voltage<=3.95)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_3);
-  if (batt_voltage>3.95&&batt_voltage<=4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_4);
+   /*attention! calibrate it yourself, i'm using 100K and 300K devider.
+   * adc需要自己校准。我用的是100K和300K的分压电阻
+   * 不校准电量显示不准
+   * 真实电压=a*adc获取的电压+b
+   * 系数需要自己计算
+   */
+  float voltage=(float)(analogRead(A0))/920; 
+  float batt_voltage=(voltage)*4-0.1815;
+ /*attention! calibrate it yourself, i'm using 100K and 300K devider.
+   * adc需要自己校准。我用的是100K和300K的分压电阻
+   * 不校准电量显示不准
+   * 真实电压=a*adc获取的电压+b
+   * 系数需要自己计算
+   */
+  if (batt_voltage<=3.4)  {EPD.clearbuffer();EPD.DrawXbm_P(39,98,100,50,(unsigned char *)needcharge);always_sleep();}
+  if (batt_voltage>3.4&&batt_voltage<=3.6)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_1);
+  if (batt_voltage>3.6&&batt_voltage<=3.8)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_2);
+  if (batt_voltage>3.8&&batt_voltage<=4.0)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_3);
+  if (batt_voltage>4.0&&batt_voltage<=4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_4);
   if (batt_voltage>4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_5);
-  
   }
 unsigned long read_config()
 {
   byte rtc_mem[4];
   ESP.rtcUserMemoryRead(4, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
   Serial.println("first time to run check config");
-  return rtc_mem[0];
+  return rtc_mem[2];
   
   }
-unsigned long check_config()
+unsigned long always_sleep()
 {
   byte rtc_mem[4];
   ESP.rtcUserMemoryRead(4, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
-  if (rtc_mem[0]!=126)
+  if (rtc_mem[2]!=126)
   {
     Serial.println("first time to run check config");
-    rtc_mem[0]=126;
+    rtc_mem[2]=126;
     ESP.rtcUserMemoryWrite(4, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
-    return 180;
-    }
-  else
-  {
-     return 44;
-    } 
-  
+       }
+   
   }
 void check_rtc_mem()
 {
