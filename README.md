@@ -3,7 +3,7 @@
 
 ## Changelog
 2015/5/28
-1.change voltage divder resistor form 1M and 300K to 300K and 100K.
+1.change voltage divder resistor form 1M and 300K to 300K and 100K.（R6,R7）
 2.change the equation for battery voltage caculation
 3.when battery voltage is lower than 3.4V, no more updating, warning on screen.
 
