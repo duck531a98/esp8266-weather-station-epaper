@@ -1,5 +1,5 @@
 # Esp8266-weather-station-epaper
-中文版说明在这里http://hlu.lu/2017/07/06/esp8266%E7%94%B5%E7%BA%B8%E5%B1%8F%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5%E7%AB%99/
+中文版说明在这里http://mxlu.com/2017/07/06/esp8266%E7%94%B5%E7%BA%B8%E5%B1%8F%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5%E7%AB%99/
 
 ## Changelog
 2015/5/28
