@@ -37,6 +37,7 @@ SOFTWARE.
 #include "EPD_drive_gpio.h"
 #include "bitmaps.h"
 #include "lang.h"
+ADC_MODE(ADC_VCC);
 /***************************
   Settings
  **************************/
@@ -47,7 +48,7 @@ const float UTC_OFFSET = 8;
 byte end_time=1;            //time that stops to update weather forecast
 byte start_time=7;          //time that starts to update weather forecast
 const char* server="www.duckweather.tk";
-const char* client_name=""; //send message to weather station via duckduckweather.esy.es/client.php
+const char* client_name="news"; //send message to weather station via duckduckweather.esy.es/client.php
 //modify language in lang.h
 
  /***************************
@@ -267,26 +268,19 @@ void configModeCallback (WiFiManager *myWiFiManager) {
 }
 void dis_batt(int16_t x, int16_t y)
 {
-   /*attention! calibrate it yourself, i'm using 100K and 300K devider.
-   * adc需要自己校准。我用的是100K和300K的分压电阻
-   * 不校准电量显示不准
-   * 真实电压=a*adc获取的电压+b
-   * 系数需要自己计算
-   */
-  float voltage=(float)(analogRead(A0))/920; 
-  float batt_voltage=(voltage)*4-0.1815;
- /*attention! calibrate it yourself, i'm using 100K and 300K devider.
-   * adc需要自己校准。我用的是100K和300K的分压电阻
-   * 不校准电量显示不准
-   * 真实电压=a*adc获取的电压+b
-   * 系数需要自己计算
-   */
-  if (batt_voltage<=3.4)  {EPD.clearbuffer();EPD.DrawXbm_P(39,98,100,50,(unsigned char *)needcharge);always_sleep();}
-  if (batt_voltage>3.4&&batt_voltage<=3.6)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_1);
-  if (batt_voltage>3.6&&batt_voltage<=3.8)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_2);
-  if (batt_voltage>3.8&&batt_voltage<=4.0)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_3);
-  if (batt_voltage>4.0&&batt_voltage<=4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_4);
-  if (batt_voltage>4.2)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_5);
+  /*attention! calibrate it yourself */
+   float voltage;
+   voltage=(float)ESP.getVcc()/1000; 
+  
+  float batt_voltage=voltage;
+  
+ /*attention! calibrate it yourself */
+  if (batt_voltage<=2.9)  {EPD.clearbuffer();EPD.DrawXbm_P(39,98,100,50,(unsigned char *)needcharge);always_sleep();}
+  if (batt_voltage>2.9&&batt_voltage<=2.95)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_1);
+  if (batt_voltage>2.95&&batt_voltage<=3.0)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_2);
+  if (batt_voltage>3.0&&batt_voltage<=3.05)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_3);
+  if (batt_voltage>3.05&&batt_voltage<=3.1)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_4);
+  if (batt_voltage>3.1)  EPD.DrawXbm_P(x,y,20,10,(unsigned char *)batt_5);
   }
 unsigned long read_config()
 {
