@@ -64,17 +64,17 @@ byte heweatherclient::getMeteoconIcon(int weathercodeindex) {
 }
 
 void heweatherclient::whitespace(char c) {
-  Serial.println("whitespace");
+ // Serial.println("whitespace");
 }
 
 void heweatherclient::startDocument() {
-  Serial.println("start document");
+  //Serial.println("start document");
 }
 
 void heweatherclient::key(String key) {
    currentKey=key;
   
-  Serial.println("key: " + key);
+ // Serial.println("key: " + key);
 }
 
 void heweatherclient::value(String value) {
@@ -146,28 +146,28 @@ if(currentParent=="thedayaftertomorrow")
  if(currentKey=="date") date=value;
    if(currentKey=="qlty") qlty=value;
    if(currentKey="message") message=value;
-  Serial.println("value: " + value);
+  //Serial.println("value: " + value);
 }
 
 void heweatherclient::endArray() {
-  Serial.println("end array. ");
+  //Serial.println("end array. ");
 }
 
 void heweatherclient::endObject() {
-  Serial.println("end object. ");
+ // Serial.println("end object. ");
   currentParent="";
 }
 
 void heweatherclient::endDocument() {
-  Serial.println("end document. ");
+  //Serial.println("end document. ");
 }
 
 void heweatherclient::startArray() {
-   Serial.println("start array. ");
+  // Serial.println("start array. ");
 }
 
 void heweatherclient::startObject() {
-   Serial.println("start object. ");
+  // Serial.println("start object. ");
      currentParent = currentKey;
 }
 void heweatherclient::update()
@@ -198,7 +198,9 @@ void heweatherclient::update()
   int size = 0;
   client.setNoDelay(false);
   while(client.connected()) {
-    while((size = client.available()) > 0) {
+     Serial.println(client.available());
+     delay(500);
+    while(client.available()) {
       c = client.read();
       Serial.print(c);
       if (c == '{' || c == '[') {

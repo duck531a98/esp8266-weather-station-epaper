@@ -7,6 +7,8 @@ if (!$con)
   die('Could not connect: ' . mysqli_error());
   echo 'error sql connect';
   }
+  if ($client_name=="news") 
+  {echo "failed";die();}
 $result_message=mysqli_query($con,"SELECT * FROM message WHERE client_name='".$client_name."'");  
  if(mysqli_num_rows($result_message)==0)
 {

@@ -116,7 +116,7 @@ int WaveShare_EPD::UTFtoUNICODE(unsigned char *code)
   }
 void WaveShare_EPD::DrawUnicodeChar(byte x,int16_t y,byte width,byte height,unsigned char *code)
  { 
-  SPIFFS.begin();
+ 
   int offset;
   int sizeofsinglechar;
   if (height%8==0) sizeofsinglechar=(height/8)*width;
@@ -141,7 +141,7 @@ void WaveShare_EPD::DrawUnicodeChar(byte x,int16_t y,byte width,byte height,unsi
    {drawXbm(x,y,width,height,(unsigned char *)zi); }
    else  {drawXbm(x,y,width,height,(unsigned char *)zi);}
   
-SPIFFS.end();
+//SPIFFS.end();
 }
 
 void WaveShare_EPD::DrawUnicodeStr(byte x,int16_t y,byte width,byte height,byte strlength,unsigned char *code)
@@ -719,4 +719,3 @@ Remarks:
 /***********************************************************
 						end file
 ***********************************************************/
-

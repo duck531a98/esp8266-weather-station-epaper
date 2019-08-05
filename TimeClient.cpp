@@ -69,8 +69,8 @@ if (!client.connect(server, 80)) {
   int size = 0;
   client.setNoDelay(false);
   while(client.connected()) {
-   // Serial.println("time server connected");
-   // Serial.println(client.available());
+   Serial.println("time server connected");
+   Serial.println(client.available());
     while((size = client.available()) > 0) {
   
        
@@ -137,7 +137,5 @@ long TimeClient::getCurrentEpoch() {
 }
 
 long TimeClient::getCurrentEpochWithUtcOffset() {
-  return round(getCurrentEpoch() + 3600 * myUtcOffset + 86400L) % 86400L;
+  return long(round(getCurrentEpoch() + 3600 * myUtcOffset + 86400L)) % 86400L;
 }
-
-

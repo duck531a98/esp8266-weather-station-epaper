@@ -33,6 +33,7 @@ SOFTWARE.
 #include "heweather.h"
 #include <EEPROM.h>
 #include <SPI.h>
+#include "FS.h"
 #include "EPD_drive.h"
 #include "EPD_drive_gpio.h"
 #include "bitmaps.h"
@@ -79,6 +80,7 @@ void setup() {
   EEPROM.begin(20);
   SPI.beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE0));
   SPI.begin();
+   SPIFFS.begin();
   EPD.EPD_init_Part();driver_delay_xms(DELAYTIME);
  heweather.client_name=client_name;
    /*************************************************
