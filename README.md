@@ -1,7 +1,22 @@
 # Esp8266-weather-station-epaper
 中文版说明在这里http://mxlu.com/2017/07/06/esp8266%E7%94%B5%E7%BA%B8%E5%B1%8F%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5%E7%AB%99/
 
+
+此github版本为最终版，此版本不再更新。BUG也不会再修复。
+外壳边框宽的版本为旧版（两个按钮），旧版硬件设计和程序均停止更新。
+
+最新版优化耗电量，支持多种电纸屏，简化连接WIFI的流程，多种参数可在手机上直接设置，支持中文城市名称。
+更有超低功耗STM32L版，4.2寸大屏日历版。
+加QQ群556951885获取最新版。
+最新版https://oshwhub.com/duck/esp8266-weather-station-epaper
+
 ## Changelog
+2020-5-14
+please check the online version of pcb 
+https://oshwhub.com/duck/esp8266-weather-station-epaper
+explanations below maybe out dated
+
+
 2015/5/28
 1.change voltage divder resistor form 1M and 300K to 300K and 100K.（R6,R7）
 2.change the equation for battery voltage caculation
@@ -77,4 +92,4 @@ Highly recommend you to build your own website. I can't guarantee mine will work
 You can find php files in /php folder.
 
 ## Thanks
-Thanks to Mike Daniel Fred. They led me into the world of esp8266. Thanks to their work on esp8266 weahter stations, wifi manager, json parser and so on. Thanks to Mike, for now he's the only one which I could share and ask for help about electronic stuffs.
+Thanks to Mike Daniel Fred. They led me into the world of esp8266. Thanks to their work on esp8266 weahter stations, json parser and so on. Thanks to Mike, for now he's the only one which I could share and ask for help about electronic stuffs.
