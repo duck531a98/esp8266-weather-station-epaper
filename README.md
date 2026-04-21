@@ -1,6 +1,5 @@
 # Esp8266-weather-station-epaper
-中文版说明在这里http://mxlu.com/2017/07/06/esp8266%E7%94%B5%E7%BA%B8%E5%B1%8F%E5%A4%A9%E6%B0%94%E9%A2%84%E6%8A%A5%E7%AB%99/
-
+中文版说明在这里https://www.mxlu.com/2017/07/06/esp8266%e7%94%b5%e7%ba%b8%e5%b1%8f%e5%a4%a9%e6%b0%94%e9%a2%84%e6%8a%a5%e7%ab%99/
 
 此github版本为最终版，此版本不再更新。BUG也不会再修复。
 外壳边框宽的版本为旧版（两个按钮），旧版硬件设计和程序均停止更新。
