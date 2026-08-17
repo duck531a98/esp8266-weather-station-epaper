@@ -25,6 +25,7 @@ See more at http://blog.squix.ch
 #pragma once
 
 #include <ESP8266WiFi.h>
+#include <WiFiUdp.h>
 
 #define NTP_PACKET_SIZE 48
 
@@ -32,25 +33,35 @@ class TimeClient {
 
   private:
     float myUtcOffset = 0;
-    long localEpoc = 0;
-    long localMillisAtUpdate;
-    
-    const char* ntpServerName = "time.nist.gov";
+    unsigned long localMillisAtUpdate = 0;
     unsigned int localPort = 2390;
-    
-    byte packetBuffer[ NTP_PACKET_SIZE]; //buffer to hold incoming and outgoing packets
-   const char* server;
-    
-  public:
-    TimeClient(float utcOffset,const char * Serverurl);
-    void updateTime();
+    byte packetBuffer[NTP_PACKET_SIZE];
+    uint32_t unixEpochAtUpdate = 0;
+    uint16_t unixMillisAtUpdate = 0;
+    bool unixTimeValid = false;
 
+    void setUnixTime(uint32_t unixEpoch, uint16_t milliseconds);
+    void refreshLegacyEpochFromUnix();
+
+  public:
+    explicit TimeClient(float utcOffsetHours);
+    bool syncNtp(unsigned long budgetMs);
+    bool updateTime(const String& httpDate);
+    bool hasValidUnixTime() const;
+    void getUnixTime(uint32_t& unixEpoch, uint16_t& milliseconds) const;
+    uint32_t getUnixEpoch() const;
+    void restoreUnixEpoch(uint32_t unixEpoch, uint16_t milliseconds = 0);
+    void advanceMilliseconds(uint32_t milliseconds);
+
+    long localEpoc = 0;
     String getHours();
     String getMinutes();
     String getSeconds();
     String getFormattedTime();
+    byte getSeconds_byte();
+    byte getHours_byte();
+    byte getMinutes_byte();
     long getCurrentEpoch();
     long getCurrentEpochWithUtcOffset();
 
 };
-

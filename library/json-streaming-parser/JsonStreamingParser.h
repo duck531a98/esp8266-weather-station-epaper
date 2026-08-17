@@ -30,6 +30,7 @@ See more at http://blog.squix.ch and https://github.com/squix78/json-streaming-p
 
 #define STATE_START_DOCUMENT     0
 #define STATE_DONE               -1
+#define STATE_ERROR              -2
 #define STATE_IN_ARRAY           1
 #define STATE_IN_OBJECT          2
 #define STATE_END_KEY            3
@@ -43,6 +44,8 @@ See more at http://blog.squix.ch and https://github.com/squix78/json-streaming-p
 #define STATE_IN_NULL            11
 #define STATE_AFTER_VALUE        12
 #define STATE_UNICODE_SURROGATE  13
+#define STATE_IN_ARRAY_AFTER_COMMA  14
+#define STATE_IN_OBJECT_AFTER_COMMA 15
 
 #define STACK_OBJECT             0
 #define STACK_ARRAY              1
@@ -125,11 +128,14 @@ class JsonStreamingParser {
 
     void endObject();
 
+    boolean isValidNumberBuffer() const;
+
 
 
   public:
     JsonStreamingParser();
     void parse(char c);
     void setListener(JsonListener* listener);
+    boolean isFinished() const;
 
 };

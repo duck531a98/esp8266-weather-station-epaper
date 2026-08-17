@@ -1,0 +1,5 @@
+/.build/
+/.dev-flow/
+/config.json
+/data/config.json
+*.secret.*

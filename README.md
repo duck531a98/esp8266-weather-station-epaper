@@ -1,15 +1,12 @@
 # Esp8266-weather-station-epaper
-中文版说明在这里https://www.mxlu.com/2017/07/06/esp8266%e7%94%b5%e7%ba%b8%e5%b1%8f%e5%a4%a9%e6%b0%94%e9%a2%84%e6%8a%a5%e7%ab%99/
 
-此github版本为最终版，此版本不再更新。BUG也不会再修复。
-外壳边框宽的版本为旧版（两个按钮），旧版硬件设计和程序均停止更新。
-
-最新版优化耗电量，支持多种电纸屏，简化连接WIFI的流程，多种参数可在手机上直接设置，支持中文城市名称。
-更有超低功耗STM32L版，4.2寸大屏日历版。
 加QQ群556951885获取最新版。
-最新版https://oshwhub.com/duck/esp8266-weather-station-epaper
+PCB https://oshwhub.com/duck/esp8266-weather-station-epaper
 
 ## Changelog
+2026-8-17
+codex help me fix lots of bugs and now everyone can get weather data through personal qweather api key.
+
 2020-5-14
 please check the online version of pcb 
 https://oshwhub.com/duck/esp8266-weather-station-epaper
